@@ -3,8 +3,8 @@ name: chat
 description: "OpenAI API for text generation, chat completions, streaming, function calling, vision, embeddings, and assistants"
 metadata:
   languages: "javascript"
-  versions: "6.25.0"
-  updated-on: "2026-03-05"
+  versions: "6.27.0"
+  updated-on: "2026-03-06"
   source: maintainer
   tags: "openai,chat,llm,ai"
 ---
@@ -66,15 +66,59 @@ const client = new OpenAI({
 ## Models (as of March 2026)
 
 Default choices:
-- **General Text Tasks:** `gpt-5` or `gpt-5.2`
-- **Complex Reasoning Tasks:** `gpt-5.2`
-- **Audio Processing:** `gpt-4o-audio-preview` or `gpt-4o-mini-audio-preview`
-- **Vision Tasks:** `gpt-5`
-- **Code-focused / Search-preview:** Use `codex-mini-latest`, `gpt-4o-search-preview`, or `gpt-4o-mini-search-preview`
+- **General Text Tasks:** `gpt-5.4` (frontier) or `gpt-4.1` (non-reasoning)
+- **Complex Reasoning Tasks:** `gpt-5.4` or `gpt-5.4-pro`
+- **Fast & Cost-Efficient:** `gpt-5-mini` or `gpt-4.1-mini`
+- **Cheapest / Fastest:** `gpt-5-nano` or `gpt-4.1-nano`
+- **Audio Processing:** `gpt-audio` or `gpt-audio-mini`
+- **Vision Tasks:** `gpt-5.4` or `gpt-4.1`
+- **Agentic Coding:** `gpt-5.3-codex`
+- **Search (Chat Completions):** `gpt-5-search-api`, `gpt-4o-search-preview`, or `gpt-4o-mini-search-preview`
 
-Current models include: `gpt-5.2`, `gpt-5`, `gpt-5-mini`, `gpt-5-nano`, `gpt-4.1`, `gpt-4.1-mini`, `gpt-4.1-nano`, `o4-mini`, `o3`, `o3-mini`, `gpt-4o`, `gpt-4o-mini`, `codex-mini-latest`
+Frontier (reasoning, configurable effort):
+- `gpt-5.4`, `gpt-5.4-2026-03-05`, `gpt-5.4-pro`, `gpt-5.4-pro-2026-03-05`
+- `gpt-5.2`, `gpt-5.2-2025-12-11`, `gpt-5.2-pro`
+- `gpt-5.1`, `gpt-5.1-2025-11-13`, `gpt-5.1-pro`
+- `gpt-5`, `gpt-5-2025-08-07`, `gpt-5-pro`
+- `gpt-5-mini`, `gpt-5-mini-2025-08-07`
+- `gpt-5-nano`, `gpt-5-nano-2025-08-07`
 
-Do not use deprecated models: `gpt-4-turbo`, `gpt-4`, `gpt-3.5-turbo`
+Non-reasoning:
+- `gpt-4.1`, `gpt-4.1-2025-04-14`
+- `gpt-4.1-mini`, `gpt-4.1-mini-2025-04-14`
+- `gpt-4.1-nano`, `gpt-4.1-nano-2025-04-14`
+
+Reasoning (o-series, succeeded by GPT-5):
+- `o3`, `o3-2025-04-16`, `o3-pro`, `o3-pro-2025-06-10`
+- `o4-mini`, `o4-mini-2025-04-16`
+- `o3-mini`, `o3-mini-2025-01-31`
+- `o1`, `o1-2024-12-17`
+
+Deep research: `o3-deep-research`, `o4-mini-deep-research`
+
+Codex (agentic coding, Responses API only):
+- `gpt-5.3-codex`, `gpt-5.2-codex`, `gpt-5.1-codex`, `gpt-5.1-codex-max`, `gpt-5.1-codex-mini`, `gpt-5-codex`
+
+Audio chat: `gpt-audio`, `gpt-audio-2025-08-28`, `gpt-audio-mini`
+Realtime: `gpt-realtime`, `gpt-realtime-2025-08-28`, `gpt-realtime-mini`
+TTS: `gpt-4o-mini-tts`, `gpt-4o-mini-tts-2025-12-15`, `tts-1`, `tts-1-hd`
+STT: `gpt-4o-transcribe`, `gpt-4o-mini-transcribe`, `gpt-4o-mini-transcribe-2025-12-15`, `gpt-4o-transcribe-diarize`, `whisper-1`
+Image generation: `gpt-image-1.5`, `gpt-image-1.5-2025-12-16`, `gpt-image-1`, `gpt-image-1-mini`, `chatgpt-image-latest`
+Embeddings: `text-embedding-3-large`, `text-embedding-3-small`, `text-embedding-ada-002`
+Moderation: `omni-moderation-latest`
+Search (Chat Completions only): `gpt-5-search-api`, `gpt-4o-search-preview`, `gpt-4o-mini-search-preview`
+
+Legacy (still available): `gpt-4o`, `gpt-4o-mini`, `gpt-4-turbo`, `gpt-3.5-turbo`
+
+Deprecated (shutdown scheduled):
+- `dall-e-3`, `dall-e-2` → May 12, 2026 (use `gpt-image-1`)
+- `o1-preview`, `o1-mini` → deprecated (use `o3` or `gpt-5`)
+- `codex-mini-latest` → shut down Feb 12, 2026
+- `chatgpt-4o-latest` → shut down Feb 17, 2026
+- `gpt-4o-realtime-preview` → Mar 24, 2026 (use `gpt-realtime`)
+- `gpt-4o-mini-audio-preview` → Mar 24, 2026 (use `gpt-audio-mini`)
+- `gpt-4.5-preview` → deprecated
+- Assistants API → sunset Aug 26, 2026 (migrate to Responses API)
 
 ## Primary APIs
 
@@ -90,7 +134,7 @@ const client = new OpenAI({
 });
 
 const response = await client.responses.create({
-  model: 'gpt-4o',
+  model: 'gpt-5.4',
   instructions: 'You are a coding assistant that talks like a pirate',
   input: 'Are semicolons optional in JavaScript?',
 });
@@ -110,7 +154,7 @@ const client = new OpenAI({
 });
 
 const completion = await client.chat.completions.create({
-  model: 'gpt-4o',
+  model: 'gpt-5.4',
   messages: [
     { role: 'developer', content: 'Talk like a pirate.' },
     { role: 'user', content: 'Are semicolons optional in JavaScript?' },
@@ -150,7 +194,7 @@ import OpenAI from 'openai';
 const client = new OpenAI();
 
 const stream = await client.responses.create({
-  model: 'gpt-4o',
+  model: 'gpt-5.4',
   input: 'Say "Sheep sleep deep" ten times fast!',
   stream: true,
 });
@@ -164,7 +208,7 @@ for await (const event of stream) {
 
 ```typescript
 const stream = await client.chat.completions.create({
-  model: 'gpt-4o',
+  model: 'gpt-5.4',
   messages: [{ role: 'user', content: 'Count to 10' }],
   stream: true,
 });
@@ -215,7 +259,7 @@ await client.files.create({
 
 ```typescript
 const completion = await client.chat.completions.create({
-  model: 'gpt-4o',
+  model: 'gpt-5.4',
   messages: [{ role: 'user', content: 'What is the weather like today?' }],
   tools: [
     {
@@ -247,7 +291,7 @@ Configure model behavior using parameters in the chat completions API:
 
 ```typescript
 const completion = await client.chat.completions.create({
-  model: 'gpt-4o',
+  model: 'gpt-5.4',
   messages: [{ role: 'user', content: 'Write a creative story' }],
   temperature: 0.8,        // Higher = more creative (0-2)
   max_tokens: 1000,        // Maximum response length
@@ -261,7 +305,7 @@ const completion = await client.chat.completions.create({
 
 ```typescript
 const completion = await client.chat.completions.create({
-  model: 'gpt-4o',
+  model: 'gpt-5.4',
   messages: [
     { role: 'user', content: 'Extract the name and age from: "John is 30 years old"' }
   ],
@@ -284,7 +328,7 @@ const client = new OpenAI();
 
 try {
   const completion = await client.chat.completions.create({
-    model: 'gpt-4o',
+    model: 'gpt-5.4',
     messages: [{ role: 'user', content: 'Hello!' }],
   });
 } catch (error) {
@@ -311,7 +355,7 @@ async function createCompletionWithRetry(messages: any[], maxRetries = 3) {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       return await client.chat.completions.create({
-        model: 'gpt-4o',
+        model: 'gpt-5.4',
         messages,
       });
     } catch (error) {
@@ -342,7 +386,7 @@ class ChatSession {
     this.messages.push({ role: 'user', content });
 
     const completion = await this.client.chat.completions.create({
-      model: 'gpt-4o',
+      model: 'gpt-5.4',
       messages: this.messages,
     });
 
